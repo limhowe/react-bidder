@@ -32,6 +32,7 @@ const store = createStore(
 
 sagaMiddleware.run(sagas);
 
+// This also needs to be put as middleware... but works for now.
 socket.on('connect', () => {
   socket.on('action', (data) => {
     socketHandler(store, data);

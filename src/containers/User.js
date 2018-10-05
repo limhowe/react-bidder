@@ -15,8 +15,11 @@ class User extends Component {
   };
 
   handleBidFormSubmit = values => {
-    const { placeBid } = this.props;
-    placeBid(values);
+    const { name, placeBid } = this.props;
+    placeBid({
+      name,
+      ...values
+    });
   };
 
   _renderBidStat() {
@@ -25,12 +28,12 @@ class User extends Component {
   }
 
   _renderNotification(isBidHolder) {
-    const notification = isBidHolder ? 'Your Bid!!!' : 'Place bid again!!!';
+    const notification = isBidHolder ? 'Your Bid!!!' : 'Place bid!!!';
     return <Notification title={notification} />;
   }
 
   render() {
-    const { name, bidState: { bidder, name: itemName } } = this.props;
+    const { name, bidState: { bidder, name: itemName, price } } = this.props;
     const shouldShowNotification = itemName && bidder;
     const shouldDisableForm = !itemName || (bidder && bidder === name);
 
@@ -39,12 +42,13 @@ class User extends Component {
         <h1>{name}</h1>
         {this._renderBidStat()}
         {shouldShowNotification && this._renderNotification(bidder === name)}
-        <BidForm onSubmit={this.handleBidFormSubmit} minPrice={5} disabled={shouldDisableForm}/>
+        <BidForm onSubmit={this.handleBidFormSubmit} minPrice={price} disabled={shouldDisableForm}/>
       </div>
     );
   }
 }
 
+// TODO: we can use selector here....
 const mapStateToProps = ({ bidding: { bidState } }) => ({
   bidState,
 });

@@ -10,19 +10,27 @@ const ACTION_HANDLERS = {
     return state;
   },
   [SET_AUCTION_ITEM_SUCCESS]: (state, { data: { bids, item } }) => {
-    return { ...state, bidState: {...item, price: +item.price }, bids };
+    return { ...state, bidState: { ...item, price: +item.price }, bids };
   },
   [PLACE_BID_REQUEST]: (state, action) => {
     return state;
   },
-  [PLACE_BID_SUCCESS]: (state, { data: { bids, item }}) => {
-    return { ...state, bidState: {...item, price: +item.price }, bids };
+  [PLACE_BID_SUCCESS]: (state, { data: { bids, topBidder, item } }) => {
+    return {
+      ...state,
+      bidState: {
+        name: item.name,
+        price: +topBidder.price,
+        bidder: topBidder.bidder,
+      },
+      bids,
+    };
   },
 };
 
 let defaultState = {
   bids: {},
-  bidState: {}
+  bidState: {},
 };
 
 export default (state = defaultState, action) => {
